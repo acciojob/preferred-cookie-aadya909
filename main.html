@@ -1,29 +1,95 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Font Customizer</title>
+  <style>
+    :root {
+      --fontsize: 16px;
+      --fontcolor: #000000;
+    }
 
-<html>
-  <head>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
+    body {
+      font-size: var(--fontsize);
+      color: var(--fontcolor);
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
 
-  <body>
-    <!-- the entire body must be written by student -->
-    <form>
-      <label for="fontsize">Font Size:</label>
-      <input
-        type="number"
-        id="fontsize"
-        name="fontsize"
-        min="8"
-        max="72"
-        value="16"
-      />
-      <br />
-      <label for="fontcolor">Font Color:</label>
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input[type="submit"] {
+      margin-top: 15px;
+      padding: 5px 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Customize Your Font</h1>
+
+  <form id="font-form">
+    <label>
+      Font Size (8-72 px):
+      <input type="number" id="fontsize" name="fontsize" min="8" max="72" value="16" />
+    </label>
+
+    <label>
+      Font Color:
       <input type="color" id="fontcolor" name="fontcolor" value="#000000" />
-      <br />
-      <input type="submit" value="Save" />
-    </form>
+    </label>
 
-    <script type="text/javascript" src="./script.js"></script>
-  </body>
+    <input type="submit" value="Save" />
+  </form>
+
+  <p>This is a sample paragraph. Change the font size and color to see the effects.</p>
+
+  <script>
+    // Helper function to get a cookie value by name
+    function getCookie(name) {
+      const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+      return match ? match[2] : null;
+    }
+
+    // Function to apply CSS variables from cookies
+    function applyPreferences() {
+      const savedSize = getCookie("fontsize");
+      const savedColor = getCookie("fontcolor");
+
+      if (savedSize) {
+        document.documentElement.style.setProperty("--fontsize", savedSize + "px");
+        document.getElementById("fontsize").value = savedSize;
+      }
+
+      if (savedColor) {
+        document.documentElement.style.setProperty("--fontcolor", savedColor);
+        document.getElementById("fontcolor").value = savedColor;
+      }
+    }
+
+    // Apply preferences on page load
+    window.addEventListener("DOMContentLoaded", applyPreferences);
+
+    // Handle form submission
+    document.getElementById("font-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const size = document.getElementById("fontsize").value;
+      const color = document.getElementById("fontcolor").value;
+
+      // Save cookies
+      document.cookie = `fontsize=${size}; path=/`;
+      document.cookie = `fontcolor=${color}; path=/`;
+
+      // Apply styles immediately
+      document.documentElement.style.setProperty("--fontsize", size + "px");
+      document.documentElement.style.setProperty("--fontcolor", color);
+    });
+  </script>
+
+</body>
 </html>
